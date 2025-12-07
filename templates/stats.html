@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Attendance Stats</h1>
+
+    <h2>Total per person</h2>
+    <ul>
+      {% for name, count in total.items() %}
+      <li>{{ name }} : {{ count }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>This Month</h2>
+    <ul>
+      {% for name, count in monthly.items() %}
+      <li>{{ name }} : {{ count }}</li>
+      {% endfor %}
+    </ul>
+
+    <h2>Today</h2>
+    <ul>
+      {% for entry in today %}
+      <li>{{ entry["Name"] }} at {{ entry["Time"] }}</li>
+
+      {% endfor %}
+    </ul>
+
+    <a href="/">Back</a>
+  </body>
+</html>
