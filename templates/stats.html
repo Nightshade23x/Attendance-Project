@@ -1,30 +1,78 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <h1>Attendance Stats</h1>
+<head>
+    <title>Attendance Stats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
 
-    <h2>Total per person</h2>
-    <ul>
-      {% for name, count in total.items() %}
-      <li>{{ name }} : {{ count }}</li>
-      {% endfor %}
-    </ul>
+<body class="bg-dark text-white">
 
-    <h2>This Month</h2>
-    <ul>
-      {% for name, count in monthly.items() %}
-      <li>{{ name }} : {{ count }}</li>
-      {% endfor %}
-    </ul>
+<div class="container mt-5">
 
-    <h2>Today</h2>
-    <ul>
-      {% for entry in today %}
-      <li>{{ entry["Name"] }} at {{ entry["Time"] }}</li>
+    <h1 class="mb-4">Attendance Stats</h1>
 
-      {% endfor %}
-    </ul>
+    <!-- FILTER FORM -->
+    <form method="get" action="/stats" class="mb-4">
+        <div class="row">
 
-    <a href="/">Back</a>
-  </body>
+            <div class="col-md-4">
+                <label class="form-label">Filter by Name</label>
+                <select name="name" class="form-select">
+                    <option value="">All</option>
+                    {% for n in names %}
+                        <option value="{{ n }}" {% if n == selected_name %}selected{% endif %}>{{ n }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Filter by Date</label>
+                <input type="date" name="date" value="{{ selected_date }}" class="form-control">
+            </div>
+
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+            </div>
+
+        </div>
+    </form>
+
+    <!-- STATS CARDS -->
+    <div class="card bg-secondary mb-4">
+        <div class="card-body">
+            <h3>Total per Person</h3>
+            <ul>
+                {% for name, count in total.items() %}
+                <li>{{ name }} : {{ count }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="card bg-secondary mb-4">
+        <div class="card-body">
+            <h3>This Month</h3>
+            <ul>
+                {% for name, count in monthly.items() %}
+                <li>{{ name }} : {{ count }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="card bg-secondary mb-4">
+        <div class="card-body">
+            <h3>Today</h3>
+            <ul>
+                {% for entry in today %}
+                <li>{{ entry["Name"] }} at {{ entry["Time"] }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <a href="/" class="btn btn-outline-light">Back</a>
+</div>
+
+</body>
 </html>
