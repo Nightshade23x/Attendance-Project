@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, Response,redirect, url_for,session
 import csv
 from datetime import datetime
 from collections import defaultdict
@@ -7,6 +7,7 @@ from deepface import DeepFace
 import os
 
 app = Flask(__name__)
+app.secret_key="sammyxxx"
 
 
 def csv_exists(filename):
@@ -122,6 +123,9 @@ def home():
 
 @app.route("/stats")
 def stats():
+    if not session.get("logged_in"):
+        return redirect("/login")
+
     records = load_attendance()
 
     selected_name = request.args.get("name", "")
@@ -154,7 +158,30 @@ def video_feed():
 
 @app.route("/live")
 def live():
+    if not session.get("logged_in"):
+        return redirect("/login")
+
     return render_template("live.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        # CHANGE THESE TO YOUR OWN CREDENTIALS
+        if username == "samar" and password == "1234":
+            session["logged_in"] = True
+            return redirect(url_for("home"))
+        else:
+            return render_template("login.html", error="Invalid credentials")
+
+    return render_template("login.html")
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
